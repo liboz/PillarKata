@@ -72,5 +72,19 @@ K,Y,L,B,Q,Q,P,M,D,F,C,K,E,A,B";
             Assert.Null(matrix[1, 0]);
             Assert.Null(matrix[1, 1]);
         }
+
+        [Fact]
+        public void InsertLineIntoMatrixGarbageData()
+        {
+            var matrix = new string[2, 2];
+            var data = new string[] { "a"};
+            Assert.Throws<ArgumentException>(() => WordSearch.InsertLineIntoMatrix(matrix, data, 0));
+
+            data = new string[] { "a", "b" };
+            Assert.Throws<IndexOutOfRangeException>(() => WordSearch.InsertLineIntoMatrix(matrix, data, 2));
+
+            Assert.Throws<NullReferenceException>(() => WordSearch.InsertLineIntoMatrix(null, data, 0));
+            Assert.Throws<NullReferenceException>(() => WordSearch.InsertLineIntoMatrix(matrix, null, 0));
+        }
     }
 }

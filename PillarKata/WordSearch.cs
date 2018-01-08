@@ -29,9 +29,23 @@ namespace PillarKata
 
         public static void InsertLineIntoMatrix(string[,] matrix, string[] data, int v)
         {
-            for (int i = 0; i < data.Length; i++)
+            var d1 = matrix.GetLength(0);
+            var d2 = matrix.GetLength(1);
+
+            if (data.Length != d1)
             {
-                matrix[v, i] = data[i];
+                throw new ArgumentException("Length of data longer than row length of matrix.");
+            }
+            else if (v >= d1)
+            {
+                throw new IndexOutOfRangeException("Row to insert is not within the matrix.");
+            }
+            else
+            {
+                for (int i = 0; i < data.Length; i++)
+                {
+                    matrix[v, i] = data[i];
+                }
             }
         }
     }
