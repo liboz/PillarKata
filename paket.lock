@@ -1,0 +1,17 @@
+NUGET
+  remote: https://www.nuget.org/api/v2
+    xunit (2.3.1) - restriction: >= net461
+      xunit.analyzers (>= 0.7)
+      xunit.assert (2.3.1)
+      xunit.core (2.3.1)
+    xunit.abstractions (2.0.1) - restriction: >= net461
+    xunit.analyzers (0.7) - restriction: >= net461
+    xunit.assert (2.3.1) - restriction: >= net461
+    xunit.core (2.3.1) - restriction: >= net461
+      xunit.extensibility.core (2.3.1)
+      xunit.extensibility.execution (2.3.1)
+    xunit.extensibility.core (2.3.1) - restriction: >= net461
+      xunit.abstractions (>= 2.0.1) - restriction: >= netstandard1.1
+    xunit.extensibility.execution (2.3.1) - restriction: >= net461
+      xunit.extensibility.core (2.3.1) - restriction: >= netstandard1.1
+    xunit.runner.visualstudio (2.3.1) - restriction: >= net461
