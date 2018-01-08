@@ -8,10 +8,10 @@ namespace PillarKata
 {
     public class WordSearch
     {
-        public static int Parse(string testString)
+        public static string[] Parse(string testString)
         {
             var result = testString.Split(',');
-            return result.Length;
+            return result;
         }
     }
 }
