@@ -18,7 +18,14 @@ namespace PillarKata
         {
             var firstLine = ParseMatrixLine(data[0]);
             var result = new string[firstLine.Length, firstLine.Length];
-            return null;
+            InsertLineIntoMatrix(result, firstLine, 0);
+            for (int i = 1; i < data.Length; i++)
+            {
+                var line = ParseMatrixLine(data[i]);
+
+                InsertLineIntoMatrix(result, line, i);
+            }
+            return result;
         }
 
         public static string[] ParseMatrixLine(string data)

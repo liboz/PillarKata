@@ -58,6 +58,16 @@ K,Y,L,B,Q,Q,P,M,D,F,C,K,E,A,B";
             var result = WordSearch.ParseMatrix(arr);
             Assert.Equal(15, result.GetLength(0));
             Assert.Equal(15, result.GetLength(1));
+            Assert.Equal("U", result[0, 0]);
+            Assert.Equal("E", result[0, 14]);
+            Assert.Equal("K", result[14, 0]);
+            Assert.Equal("B", result[14, 14]);
+
+            var row10 = new string[] { "E", "Y", "Z", "Y", "G", "K", "Q", "J", "P", "C", "Q", "W", "Y", "A", "K" };
+            for (int i = 0; i < row10.Length; i++)
+            {
+                Assert.Equal(row10[i], result[9, i]);
+            }
 
         }
 
