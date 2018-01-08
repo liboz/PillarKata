@@ -10,7 +10,8 @@ namespace PillarKata
     {
         public static int Parse(string testString)
         {
-            return 7;
+            var result = testString.Split(',');
+            return result.Length;
         }
     }
 }
