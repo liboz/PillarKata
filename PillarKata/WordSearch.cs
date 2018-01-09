@@ -70,28 +70,48 @@ namespace PillarKata
             }
         }
 
-        public static Result<IReadOnlyList<int>> SearchVerticallyInLine(string[,] data, string word, int x)
+        public static Result<IReadOnlyList<int>> SearchFromPosition(string[,] data, string word, int startX, int startY, SearchType searchType, bool reverse)
         {
-            var lineStr = MakeStringFromLine(data, x);
-            return SearchInLine(lineStr, word, false);
+            var line = MakeLineFromMatrix(data, startX, startY, searchType);
+            var lineStr = MakeStringFromLine(line);
+            return SearchInLine(lineStr, reverse ? word.Reverse() : word, reverse);
         }
 
-        public static Result<IReadOnlyList<int>> SearchVerticallyInLineBackwards(string[,] data, string word, int x)
-        {
-            var lineStr = MakeStringFromLine(data, x);
-            return SearchInLine(lineStr, word.Reverse(), true);
-        }
-
-        public static string MakeStringFromLine(string[,] data, int x)
+        public static IReadOnlyList<string> MakeLineFromMatrix(string[,] data, int startX, int startY, SearchType searchType)
         {
             var line = new List<string>();
-            for (int i = 0; i < data.GetLength(1); i++)
+            switch (searchType)
             {
-                line.Add(data[x, i]);
+                case SearchType.Vertical:
+                    for (int i = 0; i < data.GetLength(1); i++)
+                    {
+                        line.Add(data[startX, i]);
+                    }
+                    break;
+                case SearchType.Horizontal:
+                    for (int i = 0; i < data.GetLength(0); i++)
+                    {
+                        line.Add(data[i, startY]);
+                    }
+                    break;
+                case SearchType.Diagonal:
+                    break;
             }
+            return line;
+        }
 
+        public static string MakeStringFromLine(IReadOnlyList<string> line)
+        {
             var lineStr = string.Join("", line);
             return lineStr;
         }
+
+    }
+
+    public enum SearchType
+    {
+        Vertical,
+        Horizontal,
+        Diagonal
     }
 }
