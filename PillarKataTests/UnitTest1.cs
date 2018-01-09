@@ -100,9 +100,35 @@ K,Y,L,B,Q,Q,P,M,D,F,C,K,E,A,B";
         }
 
         [Fact]
-        public void SearchHorizontallyInLine()
+        public void SearchVerticallyInLine()
         {
             var data = WordSearch.ParseMatrix(testDataArr);
+            var word = "BONES";
+            var result = WordSearch.SearchVerticallyInLine(data, word, 1);
+            Assert.False(result.Found);
+            result = WordSearch.SearchVerticallyInLine(data, word, 0);
+            Assert.True(result.Found);
+            var location = new int[] { 6, 7, 8, 9, 10 };
+            for (int i = 0; i < location.Length; i++)
+            {
+                Assert.Equal(location[i], result.Location[i]);
+            }
+        }
+
+        [Fact]
+        public void SearchVerticallyInLineBackwards()
+        {
+            var data = WordSearch.ParseMatrix(testDataArr);
+            var word = "KHAN";
+            var result = WordSearch.SearchVerticallyInLineBackwards(data, word, 0);
+            Assert.False(result.Found);
+            result = WordSearch.SearchVerticallyInLineBackwards(data, word, 5);
+            Assert.True(result.Found);
+            var location = new int[] { 9, 8, 7, 6 };
+            for (int i = 0; i < location.Length; i++)
+            {
+                Assert.Equal(location[i], result.Location[i]);
+            }
         }
     }
 }

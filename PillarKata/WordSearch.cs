@@ -55,5 +55,43 @@ namespace PillarKata
                 }
             }
         }
+
+        public static Result<IReadOnlyList<int>> SearchInLine (string line, string word, bool reverse)
+        {
+            var startIndex = reverse ? line.LastIndexOf(word) :  line.IndexOf(word);
+            if (startIndex == -1)
+            {
+                return new Result<IReadOnlyList<int>>(false);
+            }
+            else
+            {
+                var result = reverse ? Enumerable.Range(startIndex, word.Length).Reverse() : Enumerable.Range(startIndex, word.Length);
+                return new Result<IReadOnlyList<int>>(true, result.ToArray());
+            }
+        }
+
+        public static Result<IReadOnlyList<int>> SearchVerticallyInLine(string[,] data, string word, int x)
+        {
+            var lineStr = MakeStringFromLine(data, x);
+            return SearchInLine(lineStr, word, false);
+        }
+
+        public static Result<IReadOnlyList<int>> SearchVerticallyInLineBackwards(string[,] data, string word, int x)
+        {
+            var lineStr = MakeStringFromLine(data, x);
+            return SearchInLine(lineStr, word.Reverse(), true);
+        }
+
+        public static string MakeStringFromLine(string[,] data, int x)
+        {
+            var line = new List<string>();
+            for (int i = 0; i < data.GetLength(1); i++)
+            {
+                line.Add(data[x, i]);
+            }
+
+            var lineStr = string.Join("", line);
+            return lineStr;
+        }
     }
 }
