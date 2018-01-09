@@ -43,7 +43,7 @@ namespace PillarKata
             {
                 throw new ArgumentException("Length of data longer than row length of matrix.");
             }
-            else if (v >= d1)
+            else if (v >= d2)
             {
                 throw new IndexOutOfRangeException("Row to insert is not within the matrix.");
             }
@@ -51,7 +51,7 @@ namespace PillarKata
             {
                 for (int i = 0; i < data.Length; i++)
                 {
-                    matrix[v, i] = data[i];
+                    matrix[i, v] = data[i];
                 }
             }
         }

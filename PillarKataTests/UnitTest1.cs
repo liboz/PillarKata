@@ -24,19 +24,22 @@ O,J,Y,E,U,L,N,C,C,L,Y,B,Z,U,H
 W,Z,M,I,S,U,K,U,R,B,I,D,U,X,S
 K,Y,L,B,Q,Q,P,M,D,F,C,K,E,A,B";
 
+        public static readonly string[] testDataArr = Regex.Split(testData, "\r\n|\r|\n");
+
+
         [Fact]
         public void ReadFirstLineHappyPath()
         {
             var testString = "BONES,KHAN,KIRK,SCOTTY,SPOCK,SULU,UHURA";
             var result = WordSearch.ParseFirstLine(testString);
             Assert.Equal(7, result.Length);
-            Assert.Contains("BONES", result);
-            Assert.Contains("KHAN", result);
-            Assert.Contains("KIRK", result);
-            Assert.Contains("SCOTTY", result);
-            Assert.Contains("SPOCK", result);
-            Assert.Contains("SULU", result);
-            Assert.Contains("UHURA", result);
+            Assert.Equal("BONES", result[0]);
+            Assert.Equal("KHAN", result[1]);
+            Assert.Equal("KIRK", result[2]);
+            Assert.Equal("SCOTTY", result[3]);
+            Assert.Equal("SPOCK", result[4]);
+            Assert.Equal("SULU", result[5]);
+            Assert.Equal("UHURA", result[6]);
         }
 
         [Fact]
@@ -54,19 +57,18 @@ K,Y,L,B,Q,Q,P,M,D,F,C,K,E,A,B";
         [Fact]
         public void ReadMatrix()
         {
-            var arr = Regex.Split(testData, "\r\n|\r|\n");
-            var result = WordSearch.ParseMatrix(arr);
+            var result = WordSearch.ParseMatrix(testDataArr);
             Assert.Equal(15, result.GetLength(0));
             Assert.Equal(15, result.GetLength(1));
             Assert.Equal("U", result[0, 0]);
-            Assert.Equal("E", result[0, 14]);
-            Assert.Equal("K", result[14, 0]);
+            Assert.Equal("E", result[14, 0]);
+            Assert.Equal("K", result[0, 14]);
             Assert.Equal("B", result[14, 14]);
 
             var row10 = new string[] { "E", "Y", "Z", "Y", "G", "K", "Q", "J", "P", "C", "Q", "W", "Y", "A", "K" };
             for (int i = 0; i < row10.Length; i++)
             {
-                Assert.Equal(row10[i], result[9, i]);
+                Assert.Equal(row10[i], result[i, 9]);
             }
 
         }
@@ -78,8 +80,8 @@ K,Y,L,B,Q,Q,P,M,D,F,C,K,E,A,B";
             var data = new string[] { "a", "b" };
             WordSearch.InsertLineIntoMatrix(matrix, data, 0);
             Assert.Equal("a", matrix[0, 0]);
-            Assert.Equal("b", matrix[0, 1]);
-            Assert.Null(matrix[1, 0]);
+            Assert.Equal("b", matrix[1, 0]);
+            Assert.Null(matrix[0, 1]);
             Assert.Null(matrix[1, 1]);
         }
 
@@ -95,6 +97,12 @@ K,Y,L,B,Q,Q,P,M,D,F,C,K,E,A,B";
 
             Assert.Throws<NullReferenceException>(() => WordSearch.InsertLineIntoMatrix(null, data, 0));
             Assert.Throws<NullReferenceException>(() => WordSearch.InsertLineIntoMatrix(matrix, null, 0));
+        }
+
+        [Fact]
+        public void SearchHorizontallyInLine()
+        {
+            var data = WordSearch.ParseMatrix(testDataArr);
         }
     }
 }
