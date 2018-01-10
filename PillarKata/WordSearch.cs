@@ -14,12 +14,12 @@ namespace PillarKata
             return result;
         }
 
-        public static string[,] ParseMatrix(string[] data)
+        public static string[,] ParseMatrix(IReadOnlyList<string> data)
         {
             var firstLine = ParseMatrixLine(data[0]);
             var result = new string[firstLine.Length, firstLine.Length];
             InsertLineIntoMatrix(result, firstLine, 0);
-            for (int i = 1; i < data.Length; i++)
+            for (int i = 1; i < data.Count; i++)
             {
                 var line = ParseMatrixLine(data[i]);
 
@@ -70,11 +70,59 @@ namespace PillarKata
             }
         }
 
-        public static Result<IReadOnlyList<int>> SearchFromPosition(string[,] data, string word, int startX, int startY, SearchType searchType, bool reverse)
+        private static Result<IReadOnlyList<int>> SearchFromPosition(string[,] data, string word, int startX, int startY, SearchType searchType, bool reverse)
         {
             var line = MakeLineFromMatrix(data, startX, startY, searchType);
             var lineStr = MakeStringFromLine(line);
             return SearchInLine(lineStr, reverse ? word.Reverse() : word, reverse);
+        }
+
+        public static Result<IReadOnlyList<Coordinate>> SearchHorizontally(string[,] data, string word, int startY, bool reverse)
+        {
+            var result = SearchFromPosition(data, word, 0, startY, SearchType.Horizontal, reverse);
+            return result.Map(i => (IReadOnlyList<Coordinate>)i.Select(x => new Coordinate(x, startY)).ToArray());
+        }
+
+        public static Result<IReadOnlyList<Coordinate>> SearchVertically(string[,] data, string word, int startX, bool reverse)
+        {
+            var result = SearchFromPosition(data, word, startX, 0, SearchType.Vertical, reverse);
+            return result.Map(i => (IReadOnlyList<Coordinate>)i.Select(y => new Coordinate(startX, y)).ToArray());
+        }
+
+        public static Result<IReadOnlyList<Coordinate>> SearchDiagonally(string[,] data, string word, int diagonalIndex, bool countFromLeft, bool reverse)
+        {
+            var line = GetDiagonal(data, diagonalIndex, countFromLeft);
+            var lineStr = MakeStringFromLine(line);
+            var result =  SearchInLine(lineStr, reverse ? word.Reverse() : word, reverse);
+            return result.Map(i => (IReadOnlyList<Coordinate>)i.Select(j => DiagonalIndexToCoordinate(diagonalIndex, countFromLeft, j)).ToArray());
+        }
+
+        public static Coordinate DiagonalIndexToCoordinate(int diagonalIndex, bool countFromLeft, int indexInDiagonal)
+        {
+            var x = diagonalIndex;
+            var y = 0;
+            int i = 0;
+            while (i < indexInDiagonal)
+            {
+                x += 1;
+                y += 1;
+                i += 1;
+            }
+            return new Coordinate(x, y);
+        }
+
+        public static IReadOnlyList<string> GetDiagonal(string[,] data, int diagonalIndex, bool countFromLeft)
+        {
+            var line = new List<string>();
+            var x = diagonalIndex;
+            var y = 0;
+            while (x < data.GetLength(0) && y < data.GetLength(1))
+            {
+                line.Add(data[x, y]);
+                x += 1;
+                y += 1;
+            }
+            return line;
         }
 
         public static IReadOnlyList<string> MakeLineFromMatrix(string[,] data, int startX, int startY, SearchType searchType)
@@ -94,8 +142,6 @@ namespace PillarKata
                         line.Add(data[i, startY]);
                     }
                     break;
-                case SearchType.Diagonal:
-                    break;
             }
             return line;
         }
@@ -112,6 +158,5 @@ namespace PillarKata
     {
         Vertical,
         Horizontal,
-        Diagonal
     }
 }

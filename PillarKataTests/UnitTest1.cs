@@ -2,6 +2,7 @@
 using Xunit;
 using System;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
 
 namespace PillarKataTests
 {
@@ -24,13 +25,12 @@ O,J,Y,E,U,L,N,C,C,L,Y,B,Z,U,H
 W,Z,M,I,S,U,K,U,R,B,I,D,U,X,S
 K,Y,L,B,Q,Q,P,M,D,F,C,K,E,A,B";
 
-        public static readonly string[] testDataArr = Regex.Split(testData, "\r\n|\r|\n");
-
+        public static readonly IReadOnlyList<string> testDataArr = Regex.Split(testData, "\r\n|\r|\n");
+        public static readonly string testString = "BONES,KHAN,KIRK,SCOTTY,SPOCK,SULU,UHURA";
 
         [Fact]
         public void ReadFirstLineHappyPath()
         {
-            var testString = "BONES,KHAN,KIRK,SCOTTY,SPOCK,SULU,UHURA";
             var result = WordSearch.ParseFirstLine(testString);
             Assert.Equal(7, result.Length);
             Assert.Equal("BONES", result[0]);
@@ -103,15 +103,17 @@ K,Y,L,B,Q,Q,P,M,D,F,C,K,E,A,B";
         public void SearchVerticallyInLine()
         {
             var data = WordSearch.ParseMatrix(testDataArr);
-            var word = "BONES";
-            var result = WordSearch.SearchFromPosition(data, word, 1, 0, SearchType.Vertical, false);
+            var wordStr = WordSearch.ParseFirstLine(testString);
+            var word = wordStr[0];
+            var result = WordSearch.SearchVertically(data, word, 1, false);
             Assert.False(result.Found);
-            result = WordSearch.SearchFromPosition(data, word, 0, 0, SearchType.Vertical, false);
+            result = WordSearch.SearchVertically(data, word, 0, false);
             Assert.True(result.Found);
             var location = new int[] { 6, 7, 8, 9, 10 };
             for (int i = 0; i < location.Length; i++)
             {
-                Assert.Equal(location[i], result.Location[i]);
+                Assert.Equal(location[i], result.Location[i].Y);
+                Assert.Equal(0, result.Location[i].X);
             }
         }
 
@@ -119,32 +121,17 @@ K,Y,L,B,Q,Q,P,M,D,F,C,K,E,A,B";
         public void SearchVerticallyInLineBackwards()
         {
             var data = WordSearch.ParseMatrix(testDataArr);
-            var word = "KHAN";
-            var result = WordSearch.SearchFromPosition(data, word, 0, 0, SearchType.Vertical, true);
+            var wordStr = WordSearch.ParseFirstLine(testString);
+            var word = wordStr[1];
+            var result = WordSearch.SearchVertically(data, word, 0, true);
             Assert.False(result.Found);
-            result = WordSearch.SearchFromPosition(data, word, 5, 0, SearchType.Vertical, true);
+            result = WordSearch.SearchVertically(data, word, 5, true);
             Assert.True(result.Found);
             var location = new int[] { 9, 8, 7, 6 };
             for (int i = 0; i < location.Length; i++)
             {
-                Assert.Equal(location[i], result.Location[i]);
-            }
-        }
-
-
-        [Fact]
-        public void SearchHorizontallyInLine()
-        {
-            var data = WordSearch.ParseMatrix(testDataArr);
-            var word = "SCOTTY";
-            var result = WordSearch.SearchFromPosition(data, word, 0, 0, SearchType.Horizontal, false);
-            Assert.False(result.Found);
-            result = WordSearch.SearchFromPosition(data, word, 0, 5, SearchType.Horizontal, false);
-            Assert.True(result.Found);
-            var location = new int[] { 0, 1, 2, 3, 4, 5 };
-            for (int i = 0; i < location.Length; i++)
-            {
-                Assert.Equal(location[i], result.Location[i]);
+                Assert.Equal(location[i], result.Location[i].Y);
+                Assert.Equal(5, result.Location[i].X);
             }
         }
 
@@ -152,26 +139,76 @@ K,Y,L,B,Q,Q,P,M,D,F,C,K,E,A,B";
         public void SearchHorizontallyInLineBackwards()
         {
             var data = WordSearch.ParseMatrix(testDataArr);
-            var word = "KIRK";
-            var result = WordSearch.SearchFromPosition(data, word, 0, 0, SearchType.Horizontal, true);
+            var wordStr = WordSearch.ParseFirstLine(testString);
+            var word = wordStr[2];
+            var result = WordSearch.SearchHorizontally(data, word, 0, true);
             Assert.False(result.Found);
-            result = WordSearch.SearchFromPosition(data, word, 0, 7, SearchType.Horizontal, true);
+            result = WordSearch.SearchHorizontally(data, word, 7, true);
             Assert.True(result.Found);
             var location = new int[] { 4, 3, 2, 1 };
             for (int i = 0; i < location.Length; i++)
             {
-                Assert.Equal(location[i], result.Location[i]);
+                Assert.Equal(location[i], result.Location[i].X);
+                Assert.Equal(7, result.Location[i].Y);
             }
         }
 
         [Fact]
-        public void MakeLineFromMatrix()
+        public void SearchHorizontallyInLine()
         {
-            var startX = 0;
-            var startY = 0;
             var data = WordSearch.ParseMatrix(testDataArr);
-            var result = WordSearch.MakeLineFromMatrix(data, startX, startY, SearchType.Vertical);
+            var wordStr = WordSearch.ParseFirstLine(testString);
+            var word = wordStr[3];
+            var result = WordSearch.SearchHorizontally(data, word, 0, false);
+            Assert.False(result.Found);
+            result = WordSearch.SearchHorizontally(data, word, 5, false);
+            Assert.True(result.Found);
+            var location = new int[] { 0, 1, 2, 3, 4, 5 };
+            for (int i = 0; i < location.Length; i++)
+            {
+                Assert.Equal(location[i], result.Location[i].X);
+                Assert.Equal(5, result.Location[i].Y);
 
+            }
+        }
+
+
+        [Fact]
+        public void SearchDiagonally()
+        {
+            var data = WordSearch.ParseMatrix(testDataArr);
+            var wordStr = WordSearch.ParseFirstLine(testString);
+            var word = wordStr[4];
+            var result = WordSearch.SearchDiagonally(data, word, 0, true, false);
+            Assert.False(result.Found);
+            result = WordSearch.SearchDiagonally(data, word, 1, true, false);
+            Assert.True(result.Found);
+            var locationX = new int[] { 2, 3, 4, 5, 6 };
+            var locationY = new int[] { 1, 2, 3, 4, 5 };
+            for (int i = 0; i < locationX.Length; i++)
+            {
+                Assert.Equal(locationX[i], result.Location[i].X);
+                Assert.Equal(locationY[i], result.Location[i].Y);
+            }
+        }
+
+        [Fact]
+        public void SearchDiagonallyBackwards()
+        {
+            var data = WordSearch.ParseMatrix(testDataArr);
+            var wordStr = WordSearch.ParseFirstLine(testString);
+            var word = wordStr[5];
+            var result = WordSearch.SearchDiagonally(data, word, 1, true, true);
+            Assert.False(result.Found);
+            result = WordSearch.SearchDiagonally(data, word, 0, true, true);
+            Assert.True(result.Found);
+            var locationX = new int[] { 3, 2, 1, 0 };
+            var locationY = new int[] { 3, 2, 1, 0 };
+            for (int i = 0; i < locationX.Length; i++)
+            {
+                Assert.Equal(locationX[i], result.Location[i].X);
+                Assert.Equal(locationY[i], result.Location[i].Y);
+            }
         }
     }
 }

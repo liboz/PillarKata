@@ -22,4 +22,31 @@ namespace PillarKata
             Location = location;
         }
     }
+
+    public class Coordinate
+    {
+        public int X { get; private set; }
+        public int Y { get; private set; }
+
+        public Coordinate(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
+    }
+
+    public static class ResultExtensions
+    {
+        public static Result<V> Map<U, V>(this Result<U> input, Func<U, V> action)
+        {
+            if (input.Found)
+            {
+                return new Result<V>(true, action(input.Location));
+            }
+            else
+            {
+                return new Result<V>(false);
+            }
+        }
+    }
 }

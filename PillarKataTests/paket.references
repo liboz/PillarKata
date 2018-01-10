@@ -6,3 +6,4 @@ xunit.core
 xunit.extensibility.core
 xunit.extensibility.execution
 xunit.runner.visualstudio
+xunit.runner.console
