@@ -99,28 +99,58 @@ namespace PillarKata
 
         public static Coordinate DiagonalIndexToCoordinate(int diagonalIndex, bool countFromLeft, int indexInDiagonal)
         {
-            var x = diagonalIndex;
-            var y = 0;
-            int i = 0;
-            while (i < indexInDiagonal)
+            if (diagonalIndex >= 0)
             {
-                x += 1;
-                y += 1;
-                i += 1;
+                var x = diagonalIndex;
+                var y = 0;
+                int i = 0;
+                while (i < indexInDiagonal)
+                {
+                    x += 1;
+                    y += 1;
+                    i += 1;
+                }
+                return new Coordinate(x, y);
             }
-            return new Coordinate(x, y);
+            else
+            {
+                var x = 0;
+                var y = diagonalIndex*-1;
+                int i = 0;
+                while (i < indexInDiagonal)
+                {
+                    x += 1;
+                    y += 1;
+                    i += 1;
+                }
+                return new Coordinate(x, y);
+            }
         }
 
         public static IReadOnlyList<string> GetDiagonal(string[,] data, int diagonalIndex, bool countFromLeft)
         {
             var line = new List<string>();
-            var x = diagonalIndex;
-            var y = 0;
-            while (x < data.GetLength(0) && y < data.GetLength(1))
+            if (diagonalIndex >= 0)
             {
-                line.Add(data[x, y]);
-                x += 1;
-                y += 1;
+                var x = diagonalIndex;
+                var y = 0;
+                while (x < data.GetLength(0) && y < data.GetLength(1))
+                {
+                    line.Add(data[x, y]);
+                    x += 1;
+                    y += 1;
+                }
+            }
+            else
+            {
+                var x = 0;
+                var y = diagonalIndex*-1;
+                while (x < data.GetLength(0) && y < data.GetLength(1))
+                {
+                    line.Add(data[x, y]);
+                    x += 1;
+                    y += 1;
+                }
             }
             return line;
         }

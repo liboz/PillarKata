@@ -210,5 +210,42 @@ K,Y,L,B,Q,Q,P,M,D,F,C,K,E,A,B";
                 Assert.Equal(locationY[i], result.Location[i].Y);
             }
         }
+
+        [Fact]
+        public void SearchDiagonallyNegativeIndex()
+        {
+            var data = WordSearch.ParseMatrix(testDataArr);
+            var word = "JATN";
+            var result = WordSearch.SearchDiagonally(data, word, 0, true, false);
+            Assert.False(result.Found);
+            result = WordSearch.SearchDiagonally(data, word, -1, true, false);
+            Assert.True(result.Found);
+            var locationX = new int[] { 2, 3, 4, 5 };
+            var locationY = new int[] { 3, 4, 5, 6 };
+            for (int i = 0; i < locationX.Length; i++)
+            {
+                Assert.Equal(locationX[i], result.Location[i].X);
+                Assert.Equal(locationY[i], result.Location[i].Y);
+            }
+        }
+
+        [Fact]
+        public void SearchDiagonallyNegativeIndexBackwards()
+        {
+            var data = WordSearch.ParseMatrix(testDataArr);
+            var wordStr = WordSearch.ParseFirstLine(testString);
+            var word = "QIY";
+            var result = WordSearch.SearchDiagonally(data, word, 0, true, true);
+            Assert.False(result.Found);
+            result = WordSearch.SearchDiagonally(data, word, -10, true, true);
+            Assert.True(result.Found);
+            var locationX = new int[] { 4, 3, 2 };
+            var locationY = new int[] { 14, 13, 12 };
+            for (int i = 0; i < locationX.Length; i++)
+            {
+                Assert.Equal(locationX[i], result.Location[i].X);
+                Assert.Equal(locationY[i], result.Location[i].Y);
+            }
+        }
     }
 }
