@@ -1,4 +1,8 @@
 # PillarKata
+
+## Requirements:
+Requires C# 7, .NET 4.7, Windows
+
 ## Building:
 run ``build.bat``
 
