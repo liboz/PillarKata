@@ -8,6 +8,58 @@ namespace PillarKata
 {
     public class WordSearch
     {
+        public static IReadOnlyList<(string word, IReadOnlyList<Coordinate> coordinates)> ParseAndWordSearch(IReadOnlyList<string> data)
+        {
+            var wordList = ParseFirstLine(data[0]);
+            var matrix = ParseMatrix(data.Skip(1).ToArray());
+            var result = new List<(string word, IReadOnlyList<Coordinate> coordinates)>();
+            foreach (var word in wordList)
+            {
+                Result<IReadOnlyList<Coordinate>> searchResult;
+                for (int i = 0; i < matrix.GetLength(0); i++) //Vertical Search
+                {
+                    searchResult = SearchVertically(matrix, word, i, false);
+                    if (CheckIfFoundAndAddToResultIfItIs(word, searchResult, result)) break;
+                    searchResult = SearchVertically(matrix, word, i, true);
+                    if (CheckIfFoundAndAddToResultIfItIs(word, searchResult, result)) break;
+                }
+                for (int i = 0; i < matrix.GetLength(0); i++) //Horizontal Search
+                {
+                    searchResult = SearchHorizontally(matrix, word, i, false);
+                    if (CheckIfFoundAndAddToResultIfItIs(word, searchResult, result)) break;
+                    searchResult = SearchHorizontally(matrix, word, i, true);
+                    if (CheckIfFoundAndAddToResultIfItIs(word, searchResult, result)) break;
+                }
+                for (int i = -matrix.GetLength(0) + 1; i < matrix.GetLength(0); i++) //Diagonal Search
+                {
+                    searchResult = SearchDiagonally(matrix, word, i, true, false);
+                    if (CheckIfFoundAndAddToResultIfItIs(word, searchResult, result)) break;
+                    searchResult = SearchDiagonally(matrix, word, i, true, true);
+                    if (CheckIfFoundAndAddToResultIfItIs(word, searchResult, result)) break;
+                    searchResult = SearchDiagonally(matrix, word, i, false, false);
+                    if (CheckIfFoundAndAddToResultIfItIs(word, searchResult, result)) break;
+                    searchResult = SearchDiagonally(matrix, word, i, false, true);
+                    if (CheckIfFoundAndAddToResultIfItIs(word, searchResult, result)) break;
+                }
+            }
+            return result;
+        }
+
+        private static bool CheckIfFoundAndAddToResultIfItIs(string word, 
+            Result<IReadOnlyList<Coordinate>> searchResult, 
+            List<(string word, IReadOnlyList<Coordinate> coordinates)> result)
+        {
+            if (searchResult.Found)
+            {
+                result.Add((word, searchResult.Location));
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public static string[] ParseFirstLine(string wordString)
         {
             var result = wordString.Split(',');

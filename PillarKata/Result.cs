@@ -49,4 +49,14 @@ namespace PillarKata
             }
         }
     }
+
+    public static class CoordinateExtensions
+    {
+        public static string ToOutputString(this IEnumerable<Coordinate> input)
+        {
+            var strList = input.Select(i => $"({i.X},{i.Y})");
+            
+            return string.Join(",", strList);
+        }
+    }
 }
