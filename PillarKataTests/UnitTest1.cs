@@ -282,8 +282,7 @@ K,Y,L,B,Q,Q,P,M,D,F,C,K,E,A,B";
                 Assert.Equal(firstLine[i], wordInfo.word);
             }
 
-            var strResult = result.Select(i => $"{i.word}: {i.coordinates.ToOutputString()}");
-            var output = string.Join("\r\n", strResult);
+            var output = WordSearch.SearchResultToOutputStr(result);
             var expected =
 @"BONES: (0,6),(0,7),(0,8),(0,9),(0,10)
 KHAN: (5,9),(5,8),(5,7),(5,6)

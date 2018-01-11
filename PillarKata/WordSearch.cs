@@ -60,6 +60,12 @@ namespace PillarKata
             }
         }
 
+        public static string SearchResultToOutputStr(IReadOnlyList<(string word, IReadOnlyList<Coordinate> coordinates)> result)
+        {
+            var strResult = result.Select(i => $"{i.word}: {i.coordinates.ToOutputString()}");
+            return string.Join("\r\n", strResult);
+        }
+
         public static string[] ParseFirstLine(string wordString)
         {
             var result = wordString.Split(',');
