@@ -58,6 +58,7 @@ namespace PillarKata
 
         public static Result<IReadOnlyList<int>> SearchInLine (string line, string word, bool reverse)
         {
+            word = reverse ? word.Reverse() : word;
             var startIndex = reverse ? line.LastIndexOf(word) :  line.IndexOf(word);
             if (startIndex == -1)
             {
@@ -74,7 +75,7 @@ namespace PillarKata
         {
             var line = MakeLineFromMatrix(data, startX, startY, searchType);
             var lineStr = MakeStringFromLine(line);
-            return SearchInLine(lineStr, reverse ? word.Reverse() : word, reverse);
+            return SearchInLine(lineStr, word, reverse);
         }
 
         public static Result<IReadOnlyList<Coordinate>> SearchHorizontally(string[,] data, string word, int startY, bool reverse)
@@ -93,17 +94,25 @@ namespace PillarKata
         {
             var line = GetDiagonal(data, diagonalIndex, countFromLeft);
             var lineStr = MakeStringFromLine(line);
-            var result =  SearchInLine(lineStr, reverse ? word.Reverse() : word, reverse);
-            return result.Map(i => (IReadOnlyList<Coordinate>)i.Select(j => DiagonalIndexToCoordinate(diagonalIndex, countFromLeft, j)).ToArray());
+            var result =  SearchInLine(lineStr, word, reverse);
+            return result.Map(i => (IReadOnlyList<Coordinate>)i.Select(j => DiagonalIndexToCoordinate(diagonalIndex, countFromLeft, j, data.GetLength(0) - 1)).ToArray());
         }
 
-        public static Coordinate DiagonalIndexToCoordinate(int diagonalIndex, bool countFromLeft, int indexInDiagonal)
+        public static Coordinate DiagonalIndexToCoordinate(int diagonalIndex, bool countFromLeft, int indexInDiagonal, int xSize)
         {
-            if (diagonalIndex >= 0)
+            var x = 0;
+            var y = 0;
+            var i = 0;
+            if (countFromLeft)
             {
-                var x = diagonalIndex;
-                var y = 0;
-                int i = 0;
+                if (diagonalIndex >= 0)
+                {
+                    x = diagonalIndex;                  
+                }
+                else
+                {
+                    y = diagonalIndex * -1;
+                }
                 while (i < indexInDiagonal)
                 {
                     x += 1;
@@ -114,12 +123,19 @@ namespace PillarKata
             }
             else
             {
-                var x = 0;
-                var y = diagonalIndex*-1;
-                int i = 0;
+                x = xSize;
+                if (diagonalIndex >= 0)
+                {
+                    x = x - diagonalIndex;
+                }
+                else
+                {
+                    y = diagonalIndex * -1;
+                }
+
                 while (i < indexInDiagonal)
                 {
-                    x += 1;
+                    x -= 1;
                     y += 1;
                     i += 1;
                 }
@@ -130,10 +146,20 @@ namespace PillarKata
         public static IReadOnlyList<string> GetDiagonal(string[,] data, int diagonalIndex, bool countFromLeft)
         {
             var line = new List<string>();
-            if (diagonalIndex >= 0)
+            var x = 0 ;
+            var y = 0;
+            if (countFromLeft)
             {
-                var x = diagonalIndex;
-                var y = 0;
+                if (diagonalIndex >= 0)
+                {
+                    x = diagonalIndex;
+                    
+                }
+                else
+                {
+                    y = diagonalIndex * -1;
+                }
+
                 while (x < data.GetLength(0) && y < data.GetLength(1))
                 {
                     line.Add(data[x, y]);
@@ -143,12 +169,20 @@ namespace PillarKata
             }
             else
             {
-                var x = 0;
-                var y = diagonalIndex*-1;
-                while (x < data.GetLength(0) && y < data.GetLength(1))
+                x = data.GetLength(0) - 1; // Counting from the right!
+                if (diagonalIndex >= 0)
+                {
+                    x = x - diagonalIndex;
+                }
+                else
+                {
+                    y = diagonalIndex * -1;
+                }
+
+                while (0 <= x && y < data.GetLength(1))
                 {
                     line.Add(data[x, y]);
-                    x += 1;
+                    x -= 1;
                     y += 1;
                 }
             }

@@ -3,6 +3,7 @@ using Xunit;
 using System;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PillarKataTests
 {
@@ -108,13 +109,9 @@ K,Y,L,B,Q,Q,P,M,D,F,C,K,E,A,B";
             var result = WordSearch.SearchVertically(data, word, 1, false);
             Assert.False(result.Found);
             result = WordSearch.SearchVertically(data, word, 0, false);
-            Assert.True(result.Found);
-            var location = new int[] { 6, 7, 8, 9, 10 };
-            for (int i = 0; i < location.Length; i++)
-            {
-                Assert.Equal(location[i], result.Location[i].Y);
-                Assert.Equal(0, result.Location[i].X);
-            }
+            var locationX = Enumerable.Repeat(0, 5).ToArray();
+            var locationY = new int[] { 6, 7, 8, 9, 10 };
+            AssertCoordinate(result, locationX, locationY);
         }
 
         [Fact]
@@ -126,13 +123,9 @@ K,Y,L,B,Q,Q,P,M,D,F,C,K,E,A,B";
             var result = WordSearch.SearchVertically(data, word, 0, true);
             Assert.False(result.Found);
             result = WordSearch.SearchVertically(data, word, 5, true);
-            Assert.True(result.Found);
-            var location = new int[] { 9, 8, 7, 6 };
-            for (int i = 0; i < location.Length; i++)
-            {
-                Assert.Equal(location[i], result.Location[i].Y);
-                Assert.Equal(5, result.Location[i].X);
-            }
+            var locationX = Enumerable.Repeat(5, 4).ToArray();
+            var locationY = new int[] { 9, 8, 7, 6 };
+            AssertCoordinate(result, locationX, locationY);
         }
 
         [Fact]
@@ -144,13 +137,9 @@ K,Y,L,B,Q,Q,P,M,D,F,C,K,E,A,B";
             var result = WordSearch.SearchHorizontally(data, word, 0, true);
             Assert.False(result.Found);
             result = WordSearch.SearchHorizontally(data, word, 7, true);
-            Assert.True(result.Found);
-            var location = new int[] { 4, 3, 2, 1 };
-            for (int i = 0; i < location.Length; i++)
-            {
-                Assert.Equal(location[i], result.Location[i].X);
-                Assert.Equal(7, result.Location[i].Y);
-            }
+            var locationX = new int[] { 4, 3, 2, 1 };
+            var locationY = Enumerable.Repeat(7, 4).ToArray();
+            AssertCoordinate(result, locationX, locationY);
         }
 
         [Fact]
@@ -162,14 +151,9 @@ K,Y,L,B,Q,Q,P,M,D,F,C,K,E,A,B";
             var result = WordSearch.SearchHorizontally(data, word, 0, false);
             Assert.False(result.Found);
             result = WordSearch.SearchHorizontally(data, word, 5, false);
-            Assert.True(result.Found);
-            var location = new int[] { 0, 1, 2, 3, 4, 5 };
-            for (int i = 0; i < location.Length; i++)
-            {
-                Assert.Equal(location[i], result.Location[i].X);
-                Assert.Equal(5, result.Location[i].Y);
-
-            }
+            var locationX = new int[] { 0, 1, 2, 3, 4, 5 };
+            var locationY = Enumerable.Repeat(5, 6).ToArray();
+            AssertCoordinate(result, locationX, locationY);
         }
 
 
@@ -182,14 +166,9 @@ K,Y,L,B,Q,Q,P,M,D,F,C,K,E,A,B";
             var result = WordSearch.SearchDiagonally(data, word, 0, true, false);
             Assert.False(result.Found);
             result = WordSearch.SearchDiagonally(data, word, 1, true, false);
-            Assert.True(result.Found);
             var locationX = new int[] { 2, 3, 4, 5, 6 };
             var locationY = new int[] { 1, 2, 3, 4, 5 };
-            for (int i = 0; i < locationX.Length; i++)
-            {
-                Assert.Equal(locationX[i], result.Location[i].X);
-                Assert.Equal(locationY[i], result.Location[i].Y);
-            }
+            AssertCoordinate(result, locationX, locationY);
         }
 
         [Fact]
@@ -201,14 +180,9 @@ K,Y,L,B,Q,Q,P,M,D,F,C,K,E,A,B";
             var result = WordSearch.SearchDiagonally(data, word, 1, true, true);
             Assert.False(result.Found);
             result = WordSearch.SearchDiagonally(data, word, 0, true, true);
-            Assert.True(result.Found);
             var locationX = new int[] { 3, 2, 1, 0 };
             var locationY = new int[] { 3, 2, 1, 0 };
-            for (int i = 0; i < locationX.Length; i++)
-            {
-                Assert.Equal(locationX[i], result.Location[i].X);
-                Assert.Equal(locationY[i], result.Location[i].Y);
-            }
+            AssertCoordinate(result, locationX, locationY);
         }
 
         [Fact]
@@ -219,14 +193,9 @@ K,Y,L,B,Q,Q,P,M,D,F,C,K,E,A,B";
             var result = WordSearch.SearchDiagonally(data, word, 0, true, false);
             Assert.False(result.Found);
             result = WordSearch.SearchDiagonally(data, word, -1, true, false);
-            Assert.True(result.Found);
             var locationX = new int[] { 2, 3, 4, 5 };
             var locationY = new int[] { 3, 4, 5, 6 };
-            for (int i = 0; i < locationX.Length; i++)
-            {
-                Assert.Equal(locationX[i], result.Location[i].X);
-                Assert.Equal(locationY[i], result.Location[i].Y);
-            }
+            AssertCoordinate(result, locationX, locationY);
         }
 
         [Fact]
@@ -238,10 +207,71 @@ K,Y,L,B,Q,Q,P,M,D,F,C,K,E,A,B";
             var result = WordSearch.SearchDiagonally(data, word, 0, true, true);
             Assert.False(result.Found);
             result = WordSearch.SearchDiagonally(data, word, -10, true, true);
-            Assert.True(result.Found);
             var locationX = new int[] { 4, 3, 2 };
             var locationY = new int[] { 14, 13, 12 };
-            for (int i = 0; i < locationX.Length; i++)
+            AssertCoordinate(result, locationX, locationY);
+        }
+
+        [Fact]
+        public void SearchDiagonallyFromRight()
+        {
+            var data = WordSearch.ParseMatrix(testDataArr);
+            var wordStr = WordSearch.ParseFirstLine(testString);
+            var word = wordStr[6];
+            var result = WordSearch.SearchDiagonally(data, word, 0, false, false);
+            Assert.False(result.Found);
+            result = WordSearch.SearchDiagonally(data, word, 10, false, false);
+            var locationX = new int[] { 4, 3, 2, 1, 0 };
+            var locationY = new int[] { 0, 1, 2, 3, 4 };
+            AssertCoordinate(result, locationX, locationY);
+        }
+
+        [Fact]
+        public void SearchDiagonallyFromRightBackwards()
+        {
+            var data = WordSearch.ParseMatrix(testDataArr);
+            var word = "RQKB";
+            var result = WordSearch.SearchDiagonally(data, word, 0, false, true);
+            Assert.False(result.Found);
+            result = WordSearch.SearchDiagonally(data, word, 1, false, true);
+            var locationX = new int[] { 8, 9, 10, 11 };
+            var locationY = new int[] { 5, 4, 3, 2 };
+            AssertCoordinate(result, locationX, locationY);
+        }
+
+        [Fact]
+        public void SearchDiagonallyFromRightNegativeIndex()
+        {
+            var data = WordSearch.ParseMatrix(testDataArr);
+            var word = "BQ";
+            var result = WordSearch.SearchDiagonally(data, word, 0, false, false);
+            Assert.False(result.Found);
+            result = WordSearch.SearchDiagonally(data, word, -4, false, false);
+            var locationX = new int[] { 11, 10 };
+            var locationY = new int[] { 7, 8 };
+            AssertCoordinate(result, locationX, locationY);
+        }
+
+        [Fact]
+        public void SearchDiagonallyFromRightNegativeIndexBackwards()
+        {
+            var data = WordSearch.ParseMatrix(testDataArr);
+            var wordStr = WordSearch.ParseFirstLine(testString);
+            var word = "MRLTM";
+            var result = WordSearch.SearchDiagonally(data, word, 0, false, true);
+            Assert.False(result.Found);
+            result = WordSearch.SearchDiagonally(data, word, -7, false, true);
+            var locationX = new int[] { 7, 8, 9, 10, 11 };
+            var locationY = new int[] { 14, 13, 12, 11, 10 };
+            AssertCoordinate(result, locationX, locationY);
+        }
+
+        private void AssertCoordinate(Result<IReadOnlyList<Coordinate>> result, IReadOnlyList<int> locationX, IReadOnlyList<int> locationY)
+        {
+            Assert.True(result.Found);
+            Assert.Equal(locationX.Count, locationY.Count);
+            Assert.Equal(locationX.Count, result.Location.Count);
+            for (int i = 0; i < locationX.Count; i++)
             {
                 Assert.Equal(locationX[i], result.Location[i].X);
                 Assert.Equal(locationY[i], result.Location[i].Y);
