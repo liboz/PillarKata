@@ -1,15 +1,18 @@
 # PillarKata
-Building:
-run build.bat
+## Building ##:
+run ``build.bat``
 
-Running Tests:
-"packages/xunit.runner.console/tools/net452/xunit.console.exe" "PillarKataTests/bin/Debug/PillarKataTests.dll"
+## Running Tests ##:
+run the following command:
 
-Running the Output:
-The file is found in: PillarKata\bin\Debug\PillarKata.exe
+``"packages/xunit.runner.console/tools/net452/xunit.console.exe" "PillarKataTests/bin/Debug/PillarKataTests.dll"``
 
-Make sure there is a file called input.txt in the same directory. It should be look similar to this:
-``
+## Running the Executable ##:
+The file is found in: ``PillarKata\bin\Debug\PillarKata.exe``
+
+Make sure there is a file called ``input.txt`` in the same directory. It should be look similar to this:
+
+<pre>
 BONES,KHAN,KIRK,SCOTTY,SPOCK,SULU,UHURA
 U,M,K,H,U,L,K,I,N,V,J,O,C,W,E
 L,L,S,H,K,Z,Z,W,Z,C,G,J,U,Y,G
@@ -26,5 +29,6 @@ T,G,L,B,H,C,B,E,C,H,T,O,Y,I,K
 O,J,Y,E,U,L,N,C,C,L,Y,B,Z,U,H
 W,Z,M,I,S,U,K,U,R,B,I,D,U,X,S
 K,Y,L,B,Q,Q,P,M,D,F,C,K,E,A,B
-``
-Running the executable will then generate a file called output.txt with the result as well as printing the result to console.
+</pre>
+
+Running the executable will then generate a file called ``output.txt`` with the result. It will also print the result to console.
