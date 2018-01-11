@@ -1,13 +1,13 @@
 # PillarKata
-## Building ##:
+## Building:
 run ``build.bat``
 
-## Running Tests ##:
+## Running Tests:
 run the following command:
 
 ``"packages/xunit.runner.console/tools/net452/xunit.console.exe" "PillarKataTests/bin/Debug/PillarKataTests.dll"``
 
-## Running the Executable ##:
+## Running the Executable:
 The file is found in: ``PillarKata\bin\Debug\PillarKata.exe``
 
 Make sure there is a file called ``input.txt`` in the same directory. It should be look similar to this:
